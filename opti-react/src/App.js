@@ -35,19 +35,39 @@ const optimizely = createInstance({
 });
 
 function App() {
+  const userId = 'user123';
+  const user = optimizely.createUserContext(userId);
+  const decision = user.decide('discount');
+  // const variation = optimizely.activate('discount', userId);
+
+  // if (variation === 'control') {
+  //   console.log('variation control', variation);
+  // } else if (variation === 'treatment') {
+  //   console.log('variation treatment', variation);
+  // } else {
+  //   console.log('variation default', variation);
+  // }
+
+  const enabled = optimizely.isFeatureEnabled('discount', userId);
+  const amount = optimizely.getFeatureVariableInteger('discount', 'amount', userId);
+
+  console.log('isFeatureEnabled', enabled);
+  console.log('getFeatureVariable', amount);
+
   return (
     <OptimizelyProvider
       optimizely={optimizely}
       user={{
-          id: 'user123',
+          id: userId,
       }}
     >
       <div className="App">
         <header className="App-header">
           <OptimizelyFeature feature="discount">
-            {(enabled, variables) => (
-              `Got a discount of $${variables.amount || '100'}`
-            )}
+            {(enabled, variables) => {
+              console.log('variables!!!!!!!!!!!!!', variables)
+              return `Got a discount of $${variables.amount || 'BlaBla'}`
+            }}
           </OptimizelyFeature>
           <WrappedPurchaseButton />
         </header>

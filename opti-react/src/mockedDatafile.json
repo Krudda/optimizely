@@ -7,20 +7,35 @@
   "version": "4",
   "experiments": [
     {
-      "key": "my_experiment",
-      "id": "45678",
+      "key": "discount",
+      "id": "experimentId",
       "layerId": "34567",
       "status": "Running",
       "variations": [
         {
           "id": "56789",
           "key": "control",
-          "variables": []
+          "variables": [
+            {
+              "defaultValue": "10",
+              "id": "scscs",
+              "key": "amount",
+              "type": "integer"
+            }
+          ]
         },
         {
           "id": "67890",
           "key": "treatment",
-          "variables": []
+          "variables": [
+            {
+              "defaultValue": "20",
+              "value": "20",
+              "id": "sdswewq",
+              "key": "amount",
+              "type": "integer"
+            }
+          ]
         }
       ],
       "trafficAllocation": [
@@ -30,7 +45,7 @@
         },
         {
           "entityId": "67890",
-          "endOfRange": 10000
+          "endOfRange": 5000
         }
       ],
       "audienceIds": [],
@@ -42,7 +57,7 @@
       "experimentIds": [],
       "id": "56789",
       "key": "discount",
-      "rolloutId": "67890",
+      "rolloutId": "rolloutId",
       "variables": [
         {
           "defaultValue": "5",
@@ -55,9 +70,7 @@
   ],
   "events": [
     {
-      "experimentIds": [
-        "34567"
-      ],
+      "experimentIds": [],
       "id": "56789",
       "key": "purchase"
     }
@@ -67,12 +80,13 @@
   "groups": [],
   "rollouts": [
     {
+      "id": "rolloutId",
       "experiments": [
         {
           "audienceIds": [],
           "forcedVariations": {},
-          "id": "23456",
-          "key": "23456",
+          "id": "experimentId",
+          "key": "experimentKey",
           "layerId": "34567",
           "status": "Running",
           "trafficAllocation": [
@@ -84,8 +98,8 @@
           "variations": [
             {
               "featureEnabled": true,
-              "id": "56789",
-              "key": "56789",
+              "id": "discount",
+              "key": "featureKey",
               "variables": [
                 {
                   "id": "67890",
@@ -95,8 +109,7 @@
             }
           ]
         }
-      ],
-      "id": "78901"
+      ]
     }
   ],
   "variables": []

@@ -24,15 +24,16 @@ const rl = readline.createInterface({
 });
 
 // mock tracking a user event so you can see some experiment reports
-const mockPurchase = (user) => {
+const mockPurchase = (userContext) => {
+  const userId = userContext.getUserId();
   return new Promise(function (resolve) {
-    rl.question('Pretend that user ' + user.getUserId() + ' made a purchase? y/n\n', function(answer) {
+    rl.question('Pretend that user ' + userId + ' made a purchase? y/n\n', function(answer) {
       // track a user event you defined in the Optimizely app
       if (answer === 'y') {
-        user.trackEvent('purchase');
-        console.log('Optimizely recorded a purchase in experiment results for user ' + user.getUserId());
+        userContext.trackEvent('purchase');
+        console.log('Optimizely recorded a purchase in experiment results for user ' + userId);
       } else {
-        console.log(`Optimizely didn't record a purchase in experiment results for user ${user.getUserId()}`);
+        console.log(`Optimizely didn't record a purchase in experiment results for user ${userId}`);
       }
       resolve(answer);
     });
@@ -46,12 +47,12 @@ const runExperiment = async () => {
     let userId = (Math.floor(Math.random() * (10000 - 1000) + 1000)).toString();
 
     // Create hardcoded user & bucket user into a flag variation
-    let user = optimizely.createUserContext(userId);
+    let userContext = optimizely.createUserContext(userId);
 
-    console.log('user', user);
+    console.log('userContext', userContext);
 
     // 'product_sort' corresponds to a flag key in your Optimizely project
-    let decision = user.decide('product_sort');
+    let decision = userContext.decide('product_sort');
     let variationKey = decision.variationKey;
 
     // did decision fail with a critical error?
@@ -60,17 +61,17 @@ const runExperiment = async () => {
     }
     // get a dynamic configuration variable
     // 'sort_method' corresponds to a variable key in your Optimizely project
-    let sortMethod = decision.variables['sort_method'];
+    // let sortMethod = decision.variables['sort_method'];
     if (decision.enabled) {
       hasOnFlags = true;
     }
 
     // Mock what the users sees with print statements (in production, use flag variables to implement feature configuration)
     // always returns false until you enable a flag rule in your Optimizely project
-    console.log(`\nFlag ${decision.enabled ? 'on' : 'off'}. User number ${user.getUserId()} saw flag variation: ${variationKey}`
+    console.log(`\nFlag ${decision.enabled ? 'on' : 'off'}. User number ${userContext.getUserId()} saw flag variation: ${variationKey}`
       + ` as part of flag rule: ${decision.ruleKey}`);
 
-    await mockPurchase(user);
+    await mockPurchase(userContext);
   }
 
   if (!hasOnFlags) {
